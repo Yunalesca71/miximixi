@@ -93,8 +93,8 @@ graph TD
 
 - **Never Modify**: `node_modules/`, `dist/`, `.git/` directories
 - **Branch Safety**: Never push directly to `main` branch; always use feature branches
-- **GitHub Operations**: GitHub CLI (`gh`) is not available; use web interface for PRs
-- **Network Awareness**: Git operations may fail due to connectivity; retry with exponential backoff
+- **GitHub Integration**: GitHub CLI (`gh`) is available for PR creation and label management
+- **Network Awareness**: Push operations may encounter connectivity issues; switch to HTTP/1.1 if HTTP/2 framing errors occur
 - **Manual Testing Required**: No automated tests; verify changes manually in dev server
 - **Package Lock**: Only commit `package-lock.json` changes if `package.json` is also modified
 
