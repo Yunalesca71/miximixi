@@ -1,4 +1,11 @@
 /* React应用基础样式 */
+@font-face {
+  font-family: 'KeinannMaruPOP';
+  src: url('/assets/fonts/KeinannMaruPOP.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -56,41 +63,55 @@ body {
 }
 
 .app-title {
-  color: #ffffff;
   font-size: 32px;
   margin-bottom: 5px;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-  display: flex;
+  font-family: 'KeinannMaruPOP', sans-serif;
+  background: linear-gradient(90deg, #6B5B3B 0%, #6B5B3B 25%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 15px;
+  animation: sparkle 3s ease-in-out infinite;
 }
 
 .app-title-icon {
   width: 60px;
   height: auto;
   filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.8));
-  animation: sparkle 2s ease-in-out infinite;
+  animation: sparkle 3s ease-in-out infinite;
 }
 
 @keyframes sparkle {
   0%, 100% {
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
     transform: scale(1);
   }
   50% {
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 25px rgba(255, 215, 0, 0.6));
-    transform: scale(1.1);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 
 .app-subtitle {
-  color: #ffffff;
   font-size: 18px;
-  opacity: 0.9;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
   margin-top: 8px;
   margin-left: 75px;
+  font-family: 'KeinannMaruPOP', sans-serif;
+  background: linear-gradient(90deg, #6B5B3B 0%, #6B5B3B 25%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+  width: fit-content;
 }
 
 /* 响应式布局 */
@@ -106,5 +127,15 @@ body {
 
   .app-subtitle {
     margin-left: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-title {
+    font-size: 38px;
+  }
+
+  .app-subtitle {
+    font-size: 20px;
   }
 }

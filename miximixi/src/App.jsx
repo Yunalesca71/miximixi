@@ -81,9 +81,9 @@ function App() {
       <header className="app-header">
         <h1 className="app-title">
           <img src="/assets/images/title.png" alt="咪西咪西" className="app-title-icon" />
-          咪西咪西
+          咪西咪西~❤
         </h1>
-        <p className="app-subtitle">快选！老娘快饿死了！</p>
+        <p className="app-subtitle">✨美味召唤中...✨</p>
       </header>
 
       {/* 主要内容区域 */}

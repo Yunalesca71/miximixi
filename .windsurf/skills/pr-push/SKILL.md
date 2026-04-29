@@ -164,7 +164,7 @@ Commit any uncommitted changes, run lint checks, fix any issues, and push the cu
    )"
    ```
 
-   Use the commit messages and changed files to write a good title and summary.
+   Use the commit messages and changed files to write a good title and summary in English.
 
 8. **Do NOT automatically add `cc:request`:**
 
