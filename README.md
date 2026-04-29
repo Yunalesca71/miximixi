@@ -8,7 +8,8 @@
 - **随机选择**：一键随机选择餐厅，告别选择困难症
 - **炫酷动画**：GSAP驱动的流畅过渡动画效果
 - **后处理特效**：@react-three/postprocessing提供视觉增强
-- **响应式设计**：适配各种屏幕尺寸
+- **响应式设计**：使用react-responsive适配移动端、平板和桌面
+- **无限滚动**：三重复制卡牌实现无缝无限循环滚动
 
 ## 技术栈
 
@@ -16,6 +17,7 @@
 - **3D图形**：Three.js + @react-three/fiber
 - **动画库**：GSAP 3
 - **后处理**：@react-three/postprocessing
+- **响应式设计**：react-responsive
 - **性能优化**：react-window
 
 ## 项目结构
@@ -27,6 +29,7 @@ miximixi/
 │   ├── public/         # 静态资源（字体、图片）
 │   ├── src/            # React组件和应用逻辑
 │   │   ├── components/ # 可复用组件
+│   │   ├── hooks/      # 自定义Hooks（响应式设计）
 │   │   ├── App.jsx     # 主应用入口
 │   │   └── index.css   # 全局样式
 │   └── dist/           # 构建输出目录
@@ -70,19 +73,32 @@ npm run preview
 ### RestaurantSelector
 
 核心组件，管理3D卡片选择逻辑：
-- 处理用户交互事件
+- 处理用户交互事件（滚轮滚动）
 - 触发选择动画
 - 管理餐厅数据状态
+- 实现无限滚动（三重复制卡牌）
+- 响应式布局适配
+
+### useResponsive Hook
+
+自定义响应式Hook，提供统一的屏幕尺寸检测：
+- 移动端（<768px）
+- 平板端（768px-1023px）
+- 桌面端（≥1024px）
+- 动态计算字体、按钮、卡牌尺寸
 
 ### 3D场景架构
 
 ```
 React App
-├── RestaurantSelector Component
-│   ├── Three.js Canvas
-│   │   └── 3D Card Models
-│   ├── GSAP Animations
-│   └── Post-Processing Effects
+├── App Component (Header + RestaurantSelector)
+│   ├── useResponsive Hook (Responsive sizing)
+│   └── RestaurantSelector Component
+│       ├── Control Panel (Buttons)
+│       ├── Cards Container (Infinite scroll)
+│       │   └── 3D Card Models (Triple duplication)
+│       ├── GSAP Animations (Card scaling)
+│       └── Scroll Event Handling (Wheel + Scroll)
 └── Asset Loading (Fonts & Images)
 ```
 

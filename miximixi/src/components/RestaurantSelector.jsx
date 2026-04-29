@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import './RestaurantSelector.css'
+import { useResponsiveSizes } from '../hooks/useResponsive'
 
 const RestaurantSelector = () => {
+  // 餐厅数据
   const [restaurants, setRestaurants] = useState([
     { id: 1, name: '海底捞', description: '火锅', type: 'chinese' },
     { id: 2, name: '寿司郎', description: '日料', type: 'japanese' },
@@ -12,90 +14,34 @@ const RestaurantSelector = () => {
     { id: 6, name: '小肥羊', description: '火锅', type: 'chinese' }
   ])
 
-  const [screenSize, setScreenSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  })
+  // 使用响应式Hook获取尺寸和屏幕类型信息
+  const { titleFontSize, subtitleFontSize, buttonHeight, buttonFontSize, iconSize, cardContainerPaddingTop, cardDimensions, isMobile, isTablet, isDesktop } = useResponsiveSizes()
 
   const cardsWrapperRef = useRef(null)
   const containerRef = useRef(null)
   const animationRef = useRef(null)
+  const isJumping = useRef(false)
   const [scrollPosition, setScrollPosition] = useState(0)
 
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      })
-    }
+  // 解构cardDimensions获取卡片尺寸
+  const { width: cardWidth, height: cardHeight, gap, fontSize } = cardDimensions
 
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  // 复制卡片数组三份以实现无限滚动
+  const infiniteRestaurants = [...restaurants, ...restaurants, ...restaurants]
 
-  // 根据屏幕大小计算卡片尺寸
-  const getCardDimensions = () => {
-    const { width, height } = screenSize
-    
-    if (width < 768) {
-      return { cardWidth: 130, cardHeight: 200, gap: 15, fontSize: 16 }
-    } else if (width < 1024) {
-      return { cardWidth: 180, cardHeight: 280, gap: 35, fontSize: 22 }
-    } else {
-      return { cardWidth: 220, cardHeight: 320, gap: 50, fontSize: 26 }
-    }
-  }
-
-  const { cardWidth, cardHeight, gap, fontSize } = getCardDimensions()
-
-  // 复制卡片数组以实现无限滚动
-  const infiniteRestaurants = [...restaurants, ...restaurants]
-
-  // 处理滚轮事件
-  const handleWheel = (e) => {
-    const singleCardWidth = cardWidth + gap
-    const totalWidth = restaurants.length * singleCardWidth
-    
-    // 根据滚轮方向更新位置
-    setScrollPosition(prev => {
-      const newPosition = prev + e.deltaX
-      
-      // 使用模运算实现无限循环
-      const wrappedPosition = ((newPosition % totalWidth) + totalWidth) % totalWidth
-      
-      return wrappedPosition
-    })
-  }
-
-  // 使用GSAP根据scrollPosition更新卡牌位置和缩放
+  // 更新卡牌缩放效果
   useEffect(() => {
     if (!cardsWrapperRef.current) return
 
-    const singleCardWidth = cardWidth + gap
-    const totalWidth = restaurants.length * singleCardWidth
-
-    // 更新容器位置
-    gsap.set(cardsWrapperRef.current, {
-      x: -scrollPosition,
-      modifiers: {
-        x: gsap.utils.unitize(x => parseFloat(x) % totalWidth)
-      }
-    })
-
-    // 计算视口中心
+    const cards = cardsWrapperRef.current.children
     const containerWidth = containerRef.current?.clientWidth || window.innerWidth
     const centerX = containerWidth / 2
-
-    // 更新每张卡牌的缩放
-    const cards = cardsWrapperRef.current.children
+    
     Array.from(cards).forEach((card) => {
-      // 使用getBoundingClientRect获取实际位置
       const rect = card.getBoundingClientRect()
       const cardCenter = rect.left + rect.width / 2
       const distanceFromCenter = Math.abs(cardCenter - centerX)
       
-      // 计算缩放比例：距离中心越远，缩放越小
       const maxDistance = containerWidth / 2
       const scale = Math.max(0.6, 1 - (distanceFromCenter / maxDistance) * 0.4)
       
@@ -104,19 +50,101 @@ const RestaurantSelector = () => {
         zIndex: Math.round(scale * 10)
       })
     })
-  }, [scrollPosition, cardWidth, gap, restaurants.length])
+  }, [scrollPosition, cardWidth, gap])
+
+  // 初始化和滚轮/滚动事件处理
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const CARD_WIDTH = cardWidth + gap
+    const singleWidth = restaurants.length * CARD_WIDTH // 6张卡片的宽度
+
+    // 设置初始位置到第二份（中间）
+    container.scrollLeft = singleWidth
+
+    // 滚轮事件处理
+    const onWheel = (e) => {
+      e.preventDefault()
+      container.scrollLeft += e.deltaX
+
+      // 更新scrollPosition状态以触发卡片缩放更新
+      setScrollPosition(container.scrollLeft)
+
+      if (isJumping.current) return
+
+      // 滚到第三份开头 → 跳回第二份
+      if (container.scrollLeft >= singleWidth * 2) {
+        isJumping.current = true
+        container.scrollLeft -= singleWidth
+        isJumping.current = false
+      }
+
+      // 滚到第一份末尾 → 跳到第二份
+      if (container.scrollLeft <= 0) {
+        isJumping.current = true
+        container.scrollLeft += singleWidth
+        isJumping.current = false
+      }
+    }
+
+    // 监听滚动事件以更新卡片缩放
+    const onScroll = () => {
+      setScrollPosition(container.scrollLeft)
+    }
+
+    container.addEventListener('wheel', onWheel, { passive: false })
+    container.addEventListener('scroll', onScroll)
+    return () => {
+      container.removeEventListener('wheel', onWheel)
+      container.removeEventListener('scroll', onScroll)
+    }
+  }, [cardWidth, gap, restaurants.length])
 
   return (
     <div className="restaurant-selector">
       {/* 控制面板 */}
-      <section className="control-panel">
-        <div className="control-buttons">
-          <button className="btn btn-primary" onClick={() => alert('添加功能开发中')}>
-            <i className="fas fa-plus btn-icon"></i>
+      <section 
+        className={`control-panel ${isDesktop ? 'desktop' : isTablet ? 'tablet' : 'mobile'}`}
+        style={{ 
+          position: 'relative',
+          padding: isMobile ? 'var(--spacing-md) var(--spacing-lg)' : 'var(--spacing-lg) var(--spacing-xl)',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center'
+        }}
+      >
+        <div className="control-buttons" style={{ flexDirection: 'row', gap: 'var(--spacing-md)' }}>
+          <button
+            className="btn btn-primary"
+            onClick={() => alert('添加功能开发中')}
+            style={{
+              height: buttonHeight,
+              fontSize: buttonFontSize,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: isMobile ? 'auto' : isTablet ? '140px' : '140px',
+              minWidth: isMobile ? '80px' : '100px'
+            }}
+          >
+            <i className="fas fa-plus btn-icon" style={{ fontSize: `calc(${buttonHeight} * 0.5)` }}></i>
             添加饭店
           </button>
-          <button className="btn btn-secondary" onClick={() => alert('抽卡功能开发中')}>
-            <i className="fas fa-dice btn-icon"></i>
+          <button
+            className="btn btn-secondary"
+            onClick={() => alert('抽卡功能开发中')}
+            style={{
+              height: buttonHeight,
+              fontSize: buttonFontSize,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: isMobile ? 'auto' : isTablet ? '140px' : '140px',
+              minWidth: isMobile ? '80px' : '100px'
+            }}
+          >
+            <i className="fas fa-dice btn-icon" style={{ fontSize: `calc(${buttonHeight} * 0.5)` }}></i>
             开始抽卡
           </button>
         </div>
@@ -128,7 +156,6 @@ const RestaurantSelector = () => {
           ref={containerRef}
           className="cards-container" 
           style={{ gap: `${gap}px` }}
-          onWheel={handleWheel}
         >
           <div ref={cardsWrapperRef} className="cards-scroll-wrapper" style={{ gap: `${gap}px` }}>
             {infiniteRestaurants.map((restaurant, index) => (

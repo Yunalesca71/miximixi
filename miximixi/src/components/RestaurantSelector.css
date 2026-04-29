@@ -41,21 +41,23 @@
 /* RestaurantSelector组件样式 */
 .restaurant-selector {
   padding: 0;
-  height: 100vh;
+  flex: 0 0 65%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* 控制面板 */
 .control-panel {
-  padding: 20px 40px;
-  text-align: center;
-  position: absolute;
-  top: 30px;
-  right: 40px;
-  z-index: 10;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  flex-shrink: 0;
 }
 
 .control-buttons {
@@ -64,48 +66,43 @@
   gap: 10px;
 }
 
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .control-panel {
-    position: static;
-    padding: 10px 20px;
-    margin-top: 10px;
-  }
-
-  .control-buttons {
-    justify-content: center;
-  }
-
-  .main-content {
-    padding-top: 15vh;
-  }
-}
 
 /* 主要内容区域 */
 .main-content {
   padding: 0;
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
   overflow: visible;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: 25vh;
 }
 
 /* 卡片容器 */
 .cards-container {
   display: flex;
-  padding: 40px 20px 40px 20px;
-  overflow: hidden;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  overflow-x: scroll;
+  overflow-y: hidden;
   align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
+  touch-action: pan-x;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cards-container::-webkit-scrollbar {
+  display: none;
 }
 
 .cards-scroll-wrapper {
   display: flex;
   align-items: center;
   gap: inherit;
-  will-change: transform;
+  flex-shrink: 0;
 }
 
 /* 卡片样式 */
@@ -135,7 +132,16 @@
   z-index: 1;
 }
 
-.restaurant-card:hover {
+@media (hover: hover) {
+  .restaurant-card:hover {
+    transform: scale(1.05) rotateY(5deg);
+    box-shadow: 0 10px 30px rgba(201, 169, 106, 0.6), 0 0 15px rgba(201, 169, 106, 0.3);
+    border-color: #C9A96A;
+    filter: brightness(1.1);
+  }
+}
+
+.restaurant-card:active {
   transform: scale(1.05) rotateY(5deg);
   box-shadow: 0 10px 30px rgba(201, 169, 106, 0.6), 0 0 15px rgba(201, 169, 106, 0.3);
   border-color: #C9A96A;

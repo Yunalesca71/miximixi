@@ -41,6 +41,7 @@ npm run preview
 - **Styling**: CSS modules and global styles in `src/index.css`
 - **3D Graphics**: Three.js with @react-three/fiber for React integration
 - **Animations**: GSAP for smooth transitions and effects
+- **Responsive Design**: react-responsive for media query detection
 - **Commit Messages**: Use descriptive messages summarizing changes
 - **Branch Naming**: Use kebab-case feature branches (e.g., `add-windsurf-skills`)
 
@@ -60,17 +61,20 @@ graph TD
 ```
 
 **Major Components:**
-- **App.jsx**: Main application entry point
-- **RestaurantSelector**: Core component managing 3D card selection logic
+- **App.jsx**: Main application entry point with responsive header
+- **RestaurantSelector**: Core component managing card selection logic with responsive layout
+- **useResponsive Hook**: Custom hook providing responsive sizes and screen type detection
 - **Three.js Integration**: @react-three/fiber renders 3D restaurant cards
 - **Post-Processing**: @react-three/postprocessing adds visual effects
 - **Animation System**: GSAP handles card flip and selection animations
+- **Infinite Scroll**: Triple-duplication with scrollLeft-based seamless looping
 
 **Data Flow:**
-1. User interacts with 3D card interface
-2. RestaurantSelector manages state and triggers animations
-3. Three.js renders 3D scene with post-processing effects
-4. GSAP animates transitions between states
+1. User interacts with card interface (wheel scroll for horizontal navigation)
+2. useResponsive Hook provides responsive sizes based on screen type (mobile/tablet/desktop)
+3. RestaurantSelector manages state and triggers GSAP animations
+4. Three.js renders 3D scene with post-processing effects
+5. GSAP animates card scaling based on viewport center position
 
 ## Testing Strategy
 
@@ -88,6 +92,12 @@ graph TD
 - **Third-Party Assets**: Custom fonts and images in `public/assets/` - ensure proper licensing
 
 > TODO: Add security scanning to CI/CD pipeline and document asset licenses.
+
+## Rules Index
+
+| Topic | File | Description |
+|-------|------|-------------|
+| WebGL & 3D Graphics | `rules/webgl-3d-graphics.md` | OGL/Three.js integration, shader development, graphics workflows |
 
 ## Agent Guardrails
 

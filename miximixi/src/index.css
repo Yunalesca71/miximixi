@@ -6,6 +6,69 @@
   font-style: normal;
 }
 
+/* CSS变量定义 - 响应式断点和尺寸 */
+:root {
+  /* 响应式断点 */
+  --mobile-max: 767px;
+  --tablet-min: 768px;
+  --tablet-max: 1023px;
+  --desktop-min: 1024px;
+  
+  /* 字体大小 */
+  --title-font-size-mobile: 24px;
+  --title-font-size-tablet: 30px;
+  --title-font-size-desktop: 38px;
+  
+  --subtitle-font-size-mobile: 14px;
+  --subtitle-font-size-tablet: 16px;
+  --subtitle-font-size-desktop: 18px;
+  
+  /* 按钮尺寸 */
+  --button-height-mobile: 36px;
+  --button-height-desktop: 48px;
+  --button-font-size-mobile: 14px;
+  --button-font-size-desktop: 16px;
+  
+  /* 卡牌容器间距 */
+  --card-container-padding-mobile: 15vh;
+  --card-container-padding-desktop: 20vh;
+  
+  /* 卡牌尺寸 */
+  --card-width-mobile: 130px;
+  --card-width-tablet: 180px;
+  --card-width-desktop: 220px;
+  
+  --card-height-mobile: 200px;
+  --card-height-tablet: 280px;
+  --card-height-desktop: 320px;
+  
+  --card-gap-mobile: 15px;
+  --card-gap-tablet: 35px;
+  --card-gap-desktop: 50px;
+  
+  --card-font-size-mobile: 16px;
+  --card-font-size-tablet: 22px;
+  --card-font-size-desktop: 26px;
+  
+  /* 统一间距系统 */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  
+  /* 统一圆角 */
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  
+  /* 统一阴影 */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -43,7 +106,7 @@ body {
 
 /* React应用特定样式 */
 .app-container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -51,20 +114,31 @@ body {
   overflow: hidden;
 }
 
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .app-header {
-  text-align: left;
-  padding: 30px 40px;
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-xl);
   z-index: 2;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 25%;
+  min-height: 0;
 }
 
 .app-title {
-  font-size: 32px;
-  margin-bottom: 5px;
+  font-size: var(--title-font-size-desktop);
+  margin-bottom: var(--spacing-xs);
   font-family: 'KeinannMaruPOP', sans-serif;
   background: linear-gradient(90deg, #6B5B3B 0%, #6B5B3B 25%, #FFFFFF 100%);
   -webkit-background-clip: text;
@@ -72,7 +146,7 @@ body {
   background-clip: text;
   display: inline-flex;
   align-items: center;
-  gap: 15px;
+  gap: var(--spacing-md);
   animation: sparkle 3s ease-in-out infinite;
 }
 
@@ -81,6 +155,8 @@ body {
   height: auto;
   filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.8));
   animation: sparkle 3s ease-in-out infinite;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 @keyframes sparkle {
@@ -102,9 +178,9 @@ body {
 }
 
 .app-subtitle {
-  font-size: 18px;
-  margin-top: 8px;
-  margin-left: 75px;
+  font-size: var(--subtitle-font-size-desktop);
+  margin-top: var(--spacing-xs);
+  margin-left: 0;
   font-family: 'KeinannMaruPOP', sans-serif;
   background: linear-gradient(90deg, #6B5B3B 0%, #6B5B3B 25%, #FFFFFF 100%);
   -webkit-background-clip: text;
@@ -114,28 +190,3 @@ body {
   width: fit-content;
 }
 
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .app-header {
-    text-align: center;
-    padding: 20px;
-  }
-
-  .app-title {
-    justify-content: center;
-  }
-
-  .app-subtitle {
-    margin-left: 0;
-  }
-}
-
-@media (min-width: 1200px) {
-  .app-title {
-    font-size: 38px;
-  }
-
-  .app-subtitle {
-    font-size: 20px;
-  }
-}
