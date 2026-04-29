@@ -1,14 +1,18 @@
 import React from 'react'
 import Galaxy3D from './components/Galaxy3D'
 import RestaurantSelector from './components/RestaurantSelector'
+import { useResponsiveSizes } from './hooks/useResponsive'
 
 
 function App() {
+  // 使用响应式Hook获取字体大小和图标尺寸，支持移动端、平板、桌面三种断点
+  const { titleFontSize, subtitleFontSize, iconSize } = useResponsiveSizes();
+  
   return (
     <div className="app-container">
       {/* 3D星系背景 */}
       <div className="starfield-container">
-        <Galaxy3D 
+        <Galaxy3D
           density={2.2}
           glowIntensity={0.3}
           saturation={0.3}
@@ -18,18 +22,20 @@ function App() {
           animationSpeed={1}
         />
       </div>
-      
-      {/* 头部 */}
-      <header className="app-header">
-        <h1 className="app-title">
-          <img src="/assets/images/title.png" alt="咪西咪西" className="app-title-icon" />
-          咪西咪西~❤
-        </h1>
-        <p className="app-subtitle">✨美味召唤中...✨</p>
-      </header>
 
-      {/* 主要内容区域 */}
-      <RestaurantSelector />
+      <div className="app-content">
+        {/* 头部 */}
+        <header className="app-header">
+          <h1 className="app-title" style={{ fontSize: titleFontSize }}>
+            <img src="/assets/images/title.png" alt="咪西咪西" className="app-title-icon" style={{ width: iconSize, height: 'auto' }} />
+            咪西咪西~❤
+          </h1>
+          <p className="app-subtitle" style={{ fontSize: subtitleFontSize }}>✨美味召唤中...✨</p>
+        </header>
+
+        {/* 主要内容区域 */}
+        <RestaurantSelector />
+      </div>
     </div>
   )
 }
