@@ -1,0 +1,187 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Restaurant API",
+    "version": "1.0",
+    "description": "餐厅管理后台服务 API，提供 CRUD 操作"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/api/restaurants": {
+      "get": {
+        "tags": ["restaurants"],
+        "summary": "获取所有餐厅",
+        "description": "返回系统中所有餐厅的列表",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Restaurant"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["restaurants"],
+        "summary": "创建新餐厅",
+        "description": "创建一个新的餐厅记录",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRestaurantRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/restaurants/{id}": {
+      "put": {
+        "tags": ["restaurants"],
+        "summary": "更新餐厅简介",
+        "description": "修改指定餐厅的简介信息",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateRestaurantRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Restaurant"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["restaurants"],
+        "summary": "删除餐厅",
+        "description": "删除指定的餐厅记录",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Restaurant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "麦当劳"
+        },
+        "description": {
+          "type": "string",
+          "example": "全球连锁快餐品牌"
+        }
+      }
+    },
+    "CreateRestaurantRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "肯德基"
+        },
+        "description": {
+          "type": "string",
+          "example": "美式快餐连锁"
+        }
+      },
+      "required": ["name"]
+    },
+    "UpdateRestaurantRequest": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "更新后的简介"
+        }
+      },
+      "required": ["description"]
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "name is required"
+        }
+      }
+    }
+  }
+}

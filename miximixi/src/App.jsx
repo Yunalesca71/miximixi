@@ -30,7 +30,7 @@ function App() {
             <img src="/assets/images/title.png" alt="咪西咪西" className="app-title-icon" style={{ width: iconSize, height: 'auto' }} />
             咪西咪西~❤
           </h1>
-          <p className="app-subtitle" style={{ fontSize: subtitleFontSize }}>✨美味召唤中...✨</p>
+          <p className="app-subtitle" style={{ fontSize: subtitleFontSize }}>✨召唤美味中...✨</p>
         </header>
 
         {/* 主要内容区域 */}

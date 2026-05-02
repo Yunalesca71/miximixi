@@ -19,6 +19,8 @@ miximixi/
 
 ## Build & Development Commands
 
+### Frontend (React + Vite)
+
 ```bash
 # Install dependencies
 cd miximixi && npm install
@@ -33,7 +35,17 @@ npm run build
 npm run preview
 ```
 
-> TODO: No lint, test, or type-check scripts configured. Add `npm run fmt`, `npm run lint:fix`, `npm run ts`, and `npm test` as needed.
+### Backend (Go + SQLite)
+
+```bash
+# Start backend service
+cd restaurant-api && go run .
+
+# Run tests
+go test -v ./...
+```
+
+> **Go Workspaces**: For multi-module repos, create `go.work` in project root to avoid "cannot find main module" errors.
 
 ## Code Style & Conventions
 
@@ -107,6 +119,8 @@ graph TD
 - **Network Awareness**: Push operations may encounter connectivity issues; switch to HTTP/1.1 if HTTP/2 framing errors occur
 - **Manual Testing Required**: No automated tests; verify changes manually in dev server
 - **Package Lock**: Only commit `package-lock.json` changes if `package.json` is also modified
+- **gh CLI Issues**: `gh pr create` may hang indefinitely - use browser fallback URL if needed
+- **SQLite ID Gaps**: After deleting records, rebuild table to maintain continuous IDs for cleaner UX
 
 ## Extensibility Hooks
 
