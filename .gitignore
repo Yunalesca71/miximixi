@@ -95,3 +95,16 @@ jspm_packages/
 
 # Vite
 .vite/
+
+# SQLite database files
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Go binary files
+restaurant-api/restaurant-api
+*.exe
+*.dll
+*.so
+*.dylib
