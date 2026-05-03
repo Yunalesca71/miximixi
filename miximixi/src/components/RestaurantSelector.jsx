@@ -125,7 +125,7 @@ const RestaurantSelector = () => {
             }}
           >
             <i className="fas fa-plus btn-icon" style={{ fontSize: `calc(${buttonHeight} * 0.5)` }}></i>
-            添加饭店
+            添加美味
           </button>
           <button
             className="btn btn-secondary"

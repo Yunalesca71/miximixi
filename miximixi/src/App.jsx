@@ -1,6 +1,7 @@
 import React from 'react'
 import Galaxy3D from './components/Galaxy3D'
 import RestaurantSelector from './components/RestaurantSelector'
+import ShinyText from './components/ShinyText'
 import { useResponsiveSizes } from './hooks/useResponsive'
 
 
@@ -28,9 +29,27 @@ function App() {
         <header className="app-header">
           <h1 className="app-title" style={{ fontSize: titleFontSize }}>
             <img src="/assets/images/title.png" alt="咪西咪西" className="app-title-icon" style={{ width: iconSize, height: 'auto' }} />
-            咪西咪西~❤
+            <ShinyText
+              text="✨咪西咪西~✨"
+              color="#ddd8a9"
+              shineColor="#ffffff"
+              speed={3}
+              spread={120}
+              direction="left"
+              pauseOnHover={true}
+            />
           </h1>
-          <p className="app-subtitle" style={{ fontSize: subtitleFontSize }}>✨召唤美味中...✨</p>
+          <p className="app-subtitle" style={{ fontSize: subtitleFontSize }}>
+            <ShinyText
+              text="✨召唤美味中...✨"
+              color="#ddd8a9"
+              shineColor="#ffffff"
+              speed={2}
+              spread={120}
+              direction="left"
+              pauseOnHover={true}
+            />
+          </p>
         </header>
 
         {/* 主要内容区域 */}
