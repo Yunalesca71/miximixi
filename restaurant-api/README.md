@@ -188,6 +188,25 @@ CREATE TABLE restaurants (
 );
 ```
 
+当前数据库已填充 13 家示例餐厅数据，包括爱虾乃家、海底捞、W Cafe 等。
+
+## 前端集成
+
+本项目配套 React 前端 `miximixi`，通过 `GET /api/restaurants` 获取餐厅列表显示为卡牌。
+
+**启动前端：**
+```bash
+cd ../miximixi
+npm run dev
+```
+
+前端默认访问 `http://localhost:8080/api/restaurants`，如需自定义地址可设置环境变量：
+```bash
+VITE_API_URL=http://your-api:8080 npm run dev
+```
+
+CORS 已配置，支持前端跨域访问。
+
 ## 生产部署建议
 
 1. **使用反向代理** (Nginx/Caddy) 处理 HTTPS 和静态文件

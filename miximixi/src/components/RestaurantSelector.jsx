@@ -2,17 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import './RestaurantSelector.css'
 import { useResponsiveSizes } from '../hooks/useResponsive'
+import { useRestaurants } from '../hooks/useRestaurants'
 
 const RestaurantSelector = () => {
-  // 餐厅数据
-  const [restaurants, setRestaurants] = useState([
-    { id: 1, name: '海底捞', description: '火锅', type: 'chinese' },
-    { id: 2, name: '寿司郎', description: '日料', type: 'japanese' },
-    { id: 3, name: '必胜客', description: '披萨', type: 'western' },
-    { id: 4, name: '烤肉', description: '韩式烤肉', type: 'korean' },
-    { id: 5, name: '泰式料理', description: '冬阴功', type: 'thai' },
-    { id: 6, name: '小肥羊', description: '火锅', type: 'chinese' }
-  ])
+  // 从后端 API 获取餐厅数据
+  const { restaurants, loading, error, refetch } = useRestaurants()
 
   // 使用响应式Hook获取尺寸和屏幕类型信息
   const { titleFontSize, subtitleFontSize, buttonHeight, buttonFontSize, iconSize, cardContainerPaddingTop, cardDimensions, isMobile, isTablet, isDesktop } = useResponsiveSizes()
@@ -26,8 +20,10 @@ const RestaurantSelector = () => {
   // 解构cardDimensions获取卡片尺寸
   const { width: cardWidth, height: cardHeight, gap, fontSize } = cardDimensions
 
-  // 复制卡片数组三份以实现无限滚动
-  const infiniteRestaurants = [...restaurants, ...restaurants, ...restaurants]
+  // 复制卡片数组三份以实现无限滚动（空数据时返回空数组）
+  const infiniteRestaurants = restaurants.length > 0
+    ? [...restaurants, ...restaurants, ...restaurants]
+    : []
 
   // 更新卡牌缩放效果
   useEffect(() => {
@@ -152,39 +148,82 @@ const RestaurantSelector = () => {
 
       {/* 主要内容区域 */}
       <main className="main-content">
-        <div 
-          ref={containerRef}
-          className="cards-container" 
-          style={{ gap: `${gap}px` }}
-        >
-          <div ref={cardsWrapperRef} className="cards-scroll-wrapper" style={{ gap: `${gap}px` }}>
-            {infiniteRestaurants.map((restaurant, index) => (
-              <div 
-                key={`${restaurant.id}-${index}`} 
-                className="restaurant-card"
-                style={{
-                  width: `${cardWidth}px`,
-                  height: `${cardHeight}px`
-                }}
-              >
-                <div className="card-content">
-                  <h3 
-                    className="card-title" 
-                    style={{ fontSize: `${fontSize}px` }}
-                  >
-                    {restaurant.name}
-                  </h3>
-                </div>
-              </div>
-            ))}
+        {/* 加载状态 */}
+        {loading && (
+          <div className="loading-state" style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: 'var(--spacing-xl)'
+          }}>
+            <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>⏳</div>
+            <h3>加载中...</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>正在获取餐厅数据</p>
           </div>
-        </div>
+        )}
 
-        {restaurants.length === 0 && (
+        {/* 错误状态 */}
+        {!loading && error && (
+          <div className="error-state" style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: 'var(--spacing-xl)'
+          }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0px' }}>❌</div>
+            <h3>加载失败</h3>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--spacing-lg)' }}>
+              {error}
+            </p>
+            <button
+              className="btn btn-primary"
+              onClick={refetch}
+              style={{ height: buttonHeight, fontSize: buttonFontSize }}
+            >
+              重试
+            </button>
+          </div>
+        )}
+
+        {/* 空数据状态 */}
+        {!loading && !error && restaurants.length === 0 && (
           <div className="empty-state">
-            <div className="empty-icon"><i className="fas fa-treasure-chest-open"></i></div>
-            <h3>宝库是空的</h3>
-            <p>点击"添加饭店"按钮开始收集美食卡吧！</p>
+            <h3>暂无餐厅数据</h3>
+          </div>
+        )}
+
+        {/* 正常状态 - 显示卡片列表 */}
+        {!loading && !error && restaurants.length > 0 && (
+          <div
+            ref={containerRef}
+            className="cards-container"
+            style={{ gap: `${gap}px` }}
+          >
+            <div ref={cardsWrapperRef} className="cards-scroll-wrapper" style={{ gap: `${gap}px` }}>
+              {infiniteRestaurants.map((restaurant, index) => (
+                <div
+                  key={`${restaurant.id}-${index}`}
+                  className="restaurant-card"
+                  style={{
+                    width: `${cardWidth}px`,
+                    height: `${cardHeight}px`
+                  }}
+                >
+                  <div className="card-content">
+                    <h3
+                      className="card-title"
+                      style={{ fontSize: `${fontSize}px` }}
+                    >
+                      {restaurant.name}
+                    </h3>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </main>
