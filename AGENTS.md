@@ -122,6 +122,19 @@ graph TD
 - **gh CLI Issues**: `gh pr create` may hang indefinitely - use browser fallback URL if needed
 - **SQLite ID Gaps**: After deleting records, rebuild table to maintain continuous IDs for cleaner UX
 
+## Frontend Development Workflow
+
+> **Vite Dev Server Issues**: Vite dev server has file system watching issues in this environment. Use Python static server instead:
+> ```bash
+> npm run build
+> cd dist && python3 -m http.server 3000
+> ```
+> Any code changes require a rebuild and server restart to see updates.
+
+> **3D Background z-index**: When adding new UI components that overlay the Galaxy3D background, ensure they have `position: relative` and `z-index: 3` (or higher than 0) to be visible above the starfield.
+
+> **API Error State Styling**: Error/loading/empty state components need explicit CSS definitions in `RestaurantSelector.css` to ensure visibility and proper styling.
+
 ## Extensibility Hooks
 
 - **Environment Variables**: > TODO: Document available environment variables
