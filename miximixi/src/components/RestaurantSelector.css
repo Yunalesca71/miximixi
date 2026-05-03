@@ -71,12 +71,14 @@
 .main-content {
   padding: 0;
   flex: 1;
-  min-height: 0;
+  min-height: 300px;
   overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  position: relative;
+  z-index: 3;
 }
 
 /* 卡片容器 */
@@ -127,7 +129,7 @@
 }
 
 .card-content {
-  padding: 20px;
+  padding: 34px;
   background: transparent;
   z-index: 1;
 }
@@ -168,6 +170,30 @@
   font-size: 18px;
   margin: 10px 0 0 0;
   text-shadow: none;
+}
+
+/* 加载状态 */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: #ffffff;
+}
+
+.loading-state h3 {
+  font-size: 24px;
+  margin: 16px 0 8px 0;
+}
+
+/* 错误状态 */
+.error-state {
+  text-align: center;
+  padding: 40px;
+  color: #ffffff;
+}
+
+.error-state h3 {
+  font-size: 24px;
+  margin: 16px 0 8px 0;
 }
 
 /* 空状态 */
