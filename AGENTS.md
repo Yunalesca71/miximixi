@@ -135,6 +135,8 @@ graph TD
 
 > **API Error State Styling**: Error/loading/empty state components need explicit CSS definitions in `RestaurantSelector.css` to ensure visibility and proper styling.
 
+> **ShinyText Animation**: When implementing shiny text effects, use the motion library with useMotionValue and useAnimationFrame for smooth animations. The gradient uses background-clip: text with WebkitTextFillColor: transparent for the shine effect.
+
 ## Extensibility Hooks
 
 - **Environment Variables**: > TODO: Document available environment variables
